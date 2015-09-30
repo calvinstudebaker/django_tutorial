@@ -14,8 +14,13 @@ class Question(models.Model):
 
 
     def was_published_recently(self):
+        """
+        Returns True if the question was published recently, False otherwise
+        """
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
+
+    #display options for the admin page
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
@@ -28,4 +33,15 @@ class Choice(models.Model):
     votes = models.IntegerField(default = 0)
     def __unicode__(self):
         return self.choice_text
+
+class Tag(models.Model):
+    #attributes
+    name = models.CharField(max_length=100)
+    question = models.ForeignKey(Question)
+
+    #string representation
+    def __unicode__(self):
+        return self.name
+
+
 
